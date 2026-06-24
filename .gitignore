@@ -1,0 +1,36 @@
+# Root gitignore - keep app source tracked.
+
+# Node modules (root only)
+node_modules/
+
+# Build output
+dist/
+build/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.log
+
+# Environment files (root only)
+.env
+.env.*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor directories and files
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# Optional: common editor swap files
+*.sw?
+TODO_AI_CHATBOT.md
+

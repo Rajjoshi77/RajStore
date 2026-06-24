@@ -1,0 +1,376 @@
+@import "./theme.css";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Cart page styles */
+.cart-page {
+  min-height: 100vh;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.cart-page .page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.cart-page .page-header h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.cart-page .eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.875rem;
+  color: #6c757d;
+  margin-bottom: 0.25rem;
+}
+
+.cart-page .cart-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.25rem;
+}
+
+.cart-page .cart-meta span {
+  color: #6c757d;
+  font-size: 0.875rem;
+}
+
+.cart-page .empty-cart-card,
+.cart-page .order-success-card,
+.cart-page .checkout-form,
+.cart-page .checkout-summary {
+  background: #ffffff;
+  border: 1px solid #e9ecef;
+}
+
+.cart-page .order-success-card {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.cart-page .success-icon {
+  display: flex;
+  justify-content: center;
+}
+
+.cart-page .cart-item-card {
+  background: #ffffff;
+  border: 1px solid #e9ecef;
+}
+
+.cart-page .item-grid {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 1.5rem;
+}
+
+.cart-page .item-media img {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 0.5rem;
+}
+
+.cart-page .item-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.cart-page .item-details h3 {
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.cart-page .item-details p {
+  color: #6c757d;
+  margin-bottom: 0;
+}
+
+.cart-page .item-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.cart-page .item-price {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.cart-page .summary-line {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.cart-page .summary-line:last-child {
+  border-bottom: none;
+}
+
+.cart-page .total-line {
+  font-size: 1.25rem;
+  font-weight: 700;
+  padding-top: 1rem;
+  margin-top: 0.5rem;
+  border-top: 2px solid #212529;
+}
+
+.cart-page .payment-methods {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.cart-page .form-check {
+  min-height: auto;
+  padding-left: 1.75rem;
+  margin-bottom: 0;
+}
+
+.cart-page .form-check-input {
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-top: 0;
+}
+
+.cart-page .alert {
+  padding: 1rem;
+  border-radius: 0.375rem;
+  margin-bottom: 1rem;
+}
+
+.cart-page .alert-danger {
+  background-color: #f8d7da;
+  border-color: #f5c2c7;
+  color: #842029;
+}
+
+.cart-page .alert-success {
+  background-color: #d1e7dd;
+  border-color: #b3d7d9;
+  color: #0f5132;
+}
+
+.cart-page .btn {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  font-weight: 500;
+}
+
+.cart-page .btn-primary {
+  background-color: #4d6fff;
+  color: white;
+}
+
+.cart-page .btn-primary:hover {
+  background-color: #3d5ce5;
+}
+
+.cart-page .btn-outline-secondary {
+  background-color: transparent;
+  border: 1px solid #6c757d;
+  color: #6c757d;
+}
+
+.cart-page .btn-outline-secondary:hover {
+  background-color: #6c757d;
+  color: white;
+}
+
+.cart-page .btn-outline-danger {
+  background-color: transparent;
+  border: 1px solid #dc3545;
+  color: #dc3545;
+}
+
+.cart-page .btn-outline-danger:hover {
+  background-color: #dc3545;
+  color: white;
+}
+
+.cart-page .btn-lg {
+  padding: 0.75rem 1.5rem;
+  font-size: 1.125rem;
+}
+
+.cart-page .w-100 {
+  width: 100%;
+}
+
+.cart-page .mt-3 {
+  margin-top: 1rem;
+}
+
+.cart-page .mt-4 {
+  margin-top: 1.5rem;
+}
+
+.cart-page .mt-5 {
+  margin-top: 3rem;
+}
+
+.cart-page .mb-2 {
+  margin-bottom: 0.5rem;
+}
+
+.cart-page .mb-3 {
+  margin-bottom: 1rem;
+}
+
+.cart-page .mb-4 {
+  margin-bottom: 1.5rem;
+}
+
+.cart-page .my-3 {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.cart-page .py-5 {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+
+.cart-page .rounded-4 {
+  border-radius: 1rem;
+}
+
+.cart-page .shadow-sm {
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+.cart-page .text-center {
+  text-align: center;
+}
+
+/* Toast notification styles */
+.toast-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.toast-notification {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  font-size: 0.95rem;
+  font-weight: 500;
+  min-width: 280px;
+  max-width: 400px;
+  animation: slideIn 0.3s ease;
+}
+
+.toast-success {
+  background: #d1e7dd;
+  color: #0f5132;
+  border: 1px solid #b3d7d9;
+}
+
+.toast-error {
+  background: #f8d7da;
+  color: #842029;
+  border: 1px solid #f5c2c7;
+}
+
+.toast-info {
+  background: #cff4fc;
+  color: #055160;
+  border: 1px solid #b6effb;
+}
+
+.toast-close {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  opacity: 0.7;
+}
+
+.toast-close:hover {
+  opacity: 1;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Quantity controls */
+.quantity-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.quantity-controls .btn {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+}
+
+.quantity-controls .qty-value {
+  min-width: 30px;
+  text-align: center;
+  font-weight: 600;
+}
+
+/* Password toggle */
+.password-input-wrapper {
+  position: relative;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  opacity: 0.6;
+}
+
+.password-toggle:hover {
+  opacity: 1;
+}
