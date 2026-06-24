@@ -1,122 +1,92 @@
-# RajStore - Premium E-Commerce Platform
+# RajStore — Architectural Walkthrough & System Design
 
-A feature-rich, full-stack E-Commerce application built with the MERN stack, styling from TailwindCSS and React-Bootstrap, secure payments via Razorpay, custom email notifications, and an AI-powered shopping assistant.
-
----
-
-## 🚀 Key Features
-
-- **Authentication System**: Secure registration & login using JWT (JSON Web Tokens) and bcrypt password hashing.
-- **Product Management**: View, filter, and search products dynamically.
-- **Shopping Cart & Checkout**: Interactive shopping cart with route protection, restricting checkout to authenticated users.
-- **Payment Gateway Integration**: Secure checkouts with **Razorpay** integration.
-- **AI-Powered Chatbot Widget**: Integrated customer support chatbot with fallback to Hugging Face Inference API (`facebook/blenderbot-400M-distill`) for intelligent conversation.
-- **Email Notifications**: Double integration of **SendGrid** and **Nodemailer** for order confirmations, newsletters, and contact form submissions.
+RajStore is a modern full-stack E-Commerce ecosystem built with a modular React architecture and an Express/MongoDB backend service layer. This document walks through the structural layout, core features, component interactions, and key integrations implemented in the system.
 
 ---
 
-## 🛠️ Tech Stack
+## 🏗️ System Architecture & Data Flow
 
-### Frontend
-- **Framework**: React (v19) + Vite
-- **Styling**: TailwindCSS (v4) & React-Bootstrap / Bootstrap (v5)
-- **Routing**: React Router (v7)
-- **HTTP Client**: Axios
+The application is structured into two decoupled layers communicating over a JSON REST API:
 
-### Backend
-- **Runtime**: Node.js
-- **Framework**: Express.js
-- **Database**: MongoDB (Mongoose ORM)
-- **Auth**: JSON Web Tokens (JWT) & bcryptjs
-- **Integrations**: Razorpay, SendGrid Mail, Nodemailer, Hugging Face Inference API
+```mermaid
+graph TD
+    subgraph Frontend [React Application]
+        A[App.jsx] --> B(AuthContext & ToastContext)
+        B --> C[Pages & Components]
+        C --> D[ChatBot Widget]
+        C --> E[Cart / Products / Contact]
+    end
 
----
+    subgraph Backend [Express API Server]
+        F[server.js] --> G[Middleware: JWT Auth]
+        G --> H[Auth Controller]
+        G --> I[Product Controller]
+        G --> J[Order Controller]
+        G --> K[Chat Controller]
+        G --> L[Contact / Newsletter]
+    end
 
-## 📂 Project Structure
-
-```
-ecommerce/
-├── backend/                  # Express server & API endpoints
-│   ├── config/               # Database connections & setup
-│   ├── controllers/          # Request handlers (auth, chat, orders, products)
-│   ├── middleware/           # JWT Authentication middleware
-│   ├── models/               # Mongoose schemas (User, Product, Order)
-│   ├── routes/               # API routes definitions
-│   └── seed/                 # Seed scripts for initial product data
-└── frontend/
-    └── ecommerce_frontend/   # React application built with Vite
-        ├── public/           # Static assets & icons
-        └── src/              # React code components & pages
+    C -- HTTP REST Requests --> F
+    L -- Send Confirmation --> M[SendGrid & Nodemailer]
+    J -- Secure Transaction --> N[Razorpay Gateway]
+    K -- AI Query --> O[Hugging Face API]
 ```
 
 ---
 
-## ⚙️ Setup & Installation
+## 🌟 Implemented Features & Workflows
 
-### Prerequisites
-- [Node.js](https://nodejs.org/) installed
-- [MongoDB Atlas](https://www.mongodb.com/cloud/atlas) URI or a running local MongoDB instance
+### 1. User Authentication Flow
+- **Registration**: Captures user info, hashes passwords using `bcrypt` (10 salt rounds), and persists them in MongoDB.
+- **Login & Sessions**: Validates credentials and generates a signed JWT. On the client side, this token is stored in the browser's local storage and managed via `AuthContext`.
+- **Protected Actions**: Operations such as checkout and checking cart state require a valid JWT passed in the HTTP `Authorization: Bearer <token>` header, verified by backend `authMiddleware.js`.
 
-### 1. Backend Setup
-1. Navigate to the backend directory:
-   ```bash
-   cd backend
-   ```
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Create a `.env` file in the `backend/` directory with the following variables:
-   ```env
-   MONGO_URI=your_mongodb_connection_string
-   PORT=5000
-   RAZORPAY_KEY_ID=your_razorpay_key_id
-   RAZORPAY_KEY_SECRET=your_razorpay_key_secret
-   SMTP_HOST=smtp.gmail.com
-   SMTP_PORT=465
-   SMTP_USER=your_email@gmail.com
-   SMTP_PASS=your_gmail_app_password
-   SENDGRID_API_KEY=your_sendgrid_api_key
-   SENDGRID_FROM=your_sender_email@domain.com
-   CONTACT_TO=your_contact_recipient_email@domain.com
-   HUGGING_FACE_API_KEY=your_huggingface_api_token
-   ```
-4. Seed the database with sample products (optional):
-   ```bash
-   npm run seed
-   ```
-5. Start the backend server:
-   ```bash
-   npm start
-   ```
+### 2. E-Commerce Core & Checkout
+- **Catalog Management**: Dynamic product loading from MongoDB. Seeded database contains pre-configured items.
+- **Stateful Shopping Cart**: Tracks quantities, adds/removes items, and computes subtotals on the fly.
+- **Payment Processing (Razorpay)**: 
+  - Cart checkout contacts `/api/orders/checkout` to create a secure order.
+  - Razorpay SDK initializes a checkout modal on the frontend.
+  - Upon successful payment verification, the order is registered under the user's profile.
 
-### 2. Frontend Setup
-1. Navigate to the frontend directory:
-   ```bash
-   cd frontend/ecommerce_frontend
-   ```
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Start the Vite development server:
-   ```bash
-   npm run dev
-   ```
+### 3. AI Support Chatbot Widget
+- A persistent chatbot widget residing in the lower-right corner of the application allows real-time user engagement.
+- **Smart Product Recommendations**: Users can query products; the backend parses intent and attaches matching product cards (price, stock, image) to the chat bubble.
+- **Natural Language Fallback**:
+  - Leverages Hugging Face's `facebook/blenderbot-400M-distill` model via API for fluid conversation.
+  - Gracefully falls back to concise programmatic replies if no API token is configured.
+
+### 4. Notification & Marketing Engines
+- **Double-Layer Email Delivery**: Handles contact submissions and subscription registrations using both **Nodemailer (SMTP)** and the **SendGrid API**.
+- **Contact Forms**: Sends user queries directly to administrative mailboxes.
+- **Newsletter Subscription**: Seamlessly tracks subscribers for promotional outreach.
 
 ---
 
-## 💬 Chatbot Integration
+## 📂 Codebase Breakdown
 
-The built-in chatbot helper provides AI-powered shopping assistance.
-- **Endpoint**: `POST /api/chat`
-- **Body**: `{ "message": "hello" }`
-- **Response**: `{ "replyText": "...", "products": [...] }`
+### Backend Structure (`/backend`)
+- **`models/`**: Defines the data schema rules:
+  - `User`: Handles accounts, permissions, and credentials.
+  - `Product`: Stores description, inventory, images, and prices.
+  - `Order`: Maps purchases to users, status, payment details, and total amount.
+- **`controllers/` & `routes/`**: Handles application logic for individual REST domains:
+  - `authRoutes`: Login, registration.
+  - `productRoutes`: Catalog endpoints.
+  - `orderRoutes`: Protected checkouts.
+  - `chatRoutes`: Product-aware AI assistance.
+  - `contactRoutes` & `newsletterRoutes`: Lead capture and alerts.
 
-To enable smart replies, define `HUGGING_FACE_API_KEY` in the backend environment. If not provided, it falls back to custom programmatic/rule-based responses.
+### Frontend Structure (`/frontend/ecommerce_frontend`)
+- **`context/`**: Contains React Context providers (`AuthContext.jsx` for user session management; `ToastContext.jsx` for pop-up notification toasts).
+- **`pages/`**: Single Page App routes including `Home`, `Products`, `cart` (with route protection), `Login`, `Register`, and `AdminDashboard`.
+- **`components/ChatBot/`**: A self-contained directory containing components for the floating chat button, window, input, bubble rendering, and product recommendations.
+- **`services/`**: Abstracts HTTP requests using customized Axios instances pointing to `/api` routes.
 
 ---
 
-## 📄 License
+## 🎨 Styling & Design Aesthetics
 
-This project is licensed under the MIT License.
+- **TailwindCSS (v4)**: Used for rapid layout building, flex grids, spacing, responsive viewports, and clean modern interfaces.
+- **React-Bootstrap**: Combined to provide accessible, structured UI components (modals, forms, navigation structures).
+- **Aesthetic Additions**: Inter font styling, subtle micro-animations for interactive cards, smooth floating transition states, and glassmorphic elements in the AI Chatbot widget.
