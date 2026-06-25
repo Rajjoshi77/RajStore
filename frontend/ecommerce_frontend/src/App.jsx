@@ -5,7 +5,7 @@ import { ToastProvider } from './context/ToastContext';
 
 import Navbar from './components/Navbar_1';
 import Products from './pages/Products';
-import Cart from './pages/Cart';
+import Cart from './pages/cart';
 import Home from './pages/Home';
 import About from './pages/About';
 import Contact from './pages/Contact';
