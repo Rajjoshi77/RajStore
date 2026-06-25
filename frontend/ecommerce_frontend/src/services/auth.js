@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_BASE = "http://localhost:5000/api";
+const API_BASE = import.meta.env.VITE_API_URL || "https://rajstore.onrender.com/api";
 
 export const tokenKey = "token";
 export const userKey = "user";
@@ -30,6 +30,14 @@ export const authApi = axios.create({
   baseURL: API_BASE,
 });
 
+authApi.interceptors.request.use((config) => {
+  const token = getToken();
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
 export const register = async ({ name, email, password, role }) => {
   const res = await authApi.post("/auth/register", { name, email, password, role });
   if (res.data?.token) {
@@ -41,6 +49,20 @@ export const register = async ({ name, email, password, role }) => {
 
 export const login = async ({ email, password }) => {
   const res = await authApi.post("/auth/login", { email, password });
+  if (res.data?.token) {
+    setToken(res.data.token);
+    setUser(res.data.user);
+  }
+  return res.data;
+};
+
+export const sendUpdateOtp = async () => {
+  const res = await authApi.post("/auth/send-update-otp");
+  return res.data;
+};
+
+export const updateProfile = async ({ name, email, password, otp }) => {
+  const res = await authApi.put("/auth/update-profile", { name, email, password, otp });
   if (res.data?.token) {
     setToken(res.data.token);
     setUser(res.data.user);

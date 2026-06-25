@@ -13,6 +13,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Orders from './pages/Orders';
 import AdminDashboard from './pages/AdminDashboard';
+import Profile from './pages/Profile';
 import ChatBotWidget from './components/ChatBot/ChatBotWidget';
 import './components/ChatBot/chatbot.css';
 
@@ -48,6 +49,7 @@ function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/orders" element={<ProtectedRoute><Orders /></ProtectedRoute>} />
+          <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
           <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />

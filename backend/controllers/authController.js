@@ -1,5 +1,7 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import nodemailer from "nodemailer";
+import sgMail from "@sendgrid/mail";
 
 import User from "../models/User.js";
 
@@ -74,6 +76,151 @@ export const login = async (req, res) => {
     const token = signToken(user);
 
     return res.status(200).json({
+      token,
+      user: { id: user._id, name: user.name, email: user.email, role: user.role },
+    });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+export const sendUpdateOtp = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    const otpExpires = new Date(Date.now() + 10 * 60 * 1000);
+
+    user.otp = otp;
+    user.otpExpires = otpExpires;
+    await user.save();
+
+    const email = user.email;
+    const name = user.name;
+    const sendgridKey = process.env.SENDGRID_API_KEY;
+    const sendgridFrom = process.env.SENDGRID_FROM;
+    const smtpHost = process.env.SMTP_HOST;
+    const smtpPort = process.env.SMTP_PORT;
+    const smtpUser = process.env.SMTP_USER;
+    const smtpPass = process.env.SMTP_PASS;
+
+    const emailSubject = "Security Verification: OTP for Profile Update";
+    const emailText = `Hello ${name},\n\nYour OTP for updating your profile is: ${otp}.\nThis OTP is valid for 10 minutes.\n\nIf you did not request this update, please secure your account.`;
+    const emailHtml = `<p>Hello <strong>${name}</strong>,</p>
+                       <p>Your OTP for updating your profile is: <strong style="font-size: 1.2em; color: #007bff;">${otp}</strong>.</p>
+                       <p>This OTP is valid for 10 minutes.</p>
+                       <p>If you did not request this update, please ignore this email or secure your account.</p>`;
+
+    let sent = false;
+
+    if (sendgridKey && sendgridFrom) {
+      try {
+        sgMail.setApiKey(sendgridKey);
+        const msg = {
+          to: email,
+          from: sendgridFrom,
+          subject: emailSubject,
+          text: emailText,
+          html: emailHtml,
+        };
+        await sgMail.send(msg);
+        console.log(`OTP sent to ${email} via SendGrid`);
+        sent = true;
+      } catch (err) {
+        console.error("SendGrid send error inside authController:", err?.response?.body || err);
+      }
+    }
+
+    if (!sent && smtpHost && smtpPort && smtpUser && smtpPass) {
+      try {
+        const transporter = nodemailer.createTransport({
+          host: smtpHost,
+          port: Number(smtpPort),
+          secure: Number(smtpPort) === 465,
+          auth: {
+            user: smtpUser,
+            pass: smtpPass,
+          },
+        });
+
+        const mailOptions = {
+          from: smtpUser,
+          to: email,
+          subject: emailSubject,
+          text: emailText,
+          html: emailHtml,
+        };
+
+        await transporter.sendMail(mailOptions);
+        console.log(`OTP sent to ${email} via SMTP`);
+        sent = true;
+      } catch (err) {
+        console.error("SMTP send error inside authController:", err);
+      }
+    }
+
+    console.log(`[DEVELOPMENT ONLY] OTP generated for ${email}: ${otp}`);
+
+    return res.status(200).json({
+      message: sent
+        ? "OTP sent successfully to your registered email"
+        : "OTP generated (logged to server console as mailer config is missing/failed)",
+    });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+export const updateProfile = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { name, email, password, otp } = req.body;
+
+    if (!otp) {
+      return res.status(400).json({ message: "OTP is required to verify changes" });
+    }
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    if (!user.otp || !user.otpExpires || user.otp !== otp.toString().trim() || user.otpExpires < new Date()) {
+      return res.status(400).json({ message: "Invalid or expired OTP" });
+    }
+
+    if (email && email.toLowerCase().trim() !== user.email) {
+      const emailTaken = await User.findOne({ email: email.toLowerCase().trim() });
+      if (emailTaken) {
+        return res.status(409).json({ message: "Email is already in use by another account" });
+      }
+      user.email = email.toLowerCase().trim();
+    }
+
+    if (name) {
+      user.name = name.trim();
+    }
+
+    if (password) {
+      if (password.length < 6) {
+        return res.status(400).json({ message: "Password must be at least 6 characters" });
+      }
+      user.password = await bcrypt.hash(password, 10);
+    }
+
+    user.otp = undefined;
+    user.otpExpires = undefined;
+
+    await user.save();
+
+    const token = signToken(user);
+
+    return res.status(200).json({
+      message: "Profile updated successfully",
       token,
       user: { id: user._id, name: user.name, email: user.email, role: user.role },
     });

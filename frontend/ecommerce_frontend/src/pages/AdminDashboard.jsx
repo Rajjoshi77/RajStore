@@ -3,7 +3,7 @@ import axios from "axios";
 import { getToken } from "../services/auth";
 import { useToast } from "../context/ToastContext";
 
-const API_BASE = "http://localhost:5000/api";
+const API_BASE = import.meta.env.VITE_API_URL || "https://rajstore.onrender.com/api";
 
 function AdminDashboard() {
   const [activeTab, setActiveTab] = useState("products");

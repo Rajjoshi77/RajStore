@@ -3,7 +3,7 @@ import axios from "axios";
 import { getToken } from "../services/auth";
 import { useToast } from "../context/ToastContext";
 
-const API_URL = "http://localhost:5000/api/orders";
+const API_URL = `${import.meta.env.VITE_API_URL || "https://rajstore.onrender.com/api"}/orders`;
 
 function Orders() {
   const [orders, setOrders] = useState([]);

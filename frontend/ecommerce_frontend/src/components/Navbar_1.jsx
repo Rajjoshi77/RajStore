@@ -102,7 +102,9 @@ function Navbar_1() {
               <div className="profile-section">
                 {authed ? (
                   <>
-                    <span className="profile-welcome">Hi, {user?.name || 'User'}</span>
+                    <Link to="/profile" className="profile-welcome profile-welcome-link me-2 text-decoration-none">
+                      Hi, {user?.name || 'User'}
+                    </Link>
                     <button className="profile-btn" onClick={onLogout} title="Logout">
                       Logout
                     </button>

@@ -37,6 +37,7 @@ export function AuthProvider({ children }) {
       user,
       logout: doLogout,
       loginSuccess,
+      refreshUser: loginSuccess,
     }),
     [authed, user]
   );

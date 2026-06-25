@@ -16,7 +16,8 @@ const Contact = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      await axios.post('http://localhost:5000/api/contact/submit', formData);
+      const baseUrl = import.meta.env.VITE_API_URL || "https://rajstore.onrender.com/api";
+      await axios.post(`${baseUrl}/contact/submit`, formData);
       addToast('Message sent successfully!', 'success');
       setFormData({ name: '', email: '', message: '' });
     } catch (err) {

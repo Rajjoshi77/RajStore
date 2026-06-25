@@ -179,8 +179,9 @@ function Cart() {
 
       // COD - direct order creation
       if (paymentMethod === "cod") {
+        const baseUrl = import.meta.env.VITE_API_URL || "https://rajstore.onrender.com/api";
         const res = await axios.post(
-          "http://localhost:5000/api/orders/checkout",
+          `${baseUrl}/orders/checkout`,
           orderData,
           { headers: { Authorization: `Bearer ${token}` } }
         );
@@ -197,8 +198,9 @@ function Cart() {
       }
 
       // Card/UPI - Use Razorpay
+      const baseUrl = import.meta.env.VITE_API_URL || "https://rajstore.onrender.com/api";
       const res = await axios.post(
-        "http://localhost:5000/api/orders/checkout",
+        `${baseUrl}/orders/checkout`,
         orderData,
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -221,8 +223,9 @@ function Cart() {
           handler: async (response) => {
             // Verify payment on backend
             try {
+              const baseUrl = import.meta.env.VITE_API_URL || "https://rajstore.onrender.com/api";
               const verifyRes = await axios.post(
-                "http://localhost:5000/api/orders/verify-payment",
+                `${baseUrl}/orders/verify-payment`,
                 {
                   orderId: res.data.order._id,
                   razorpayOrderId: response.razorpay_order_id,
