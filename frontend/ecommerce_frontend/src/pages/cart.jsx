@@ -426,6 +426,18 @@ function Cart() {
                   />
                   <label className="form-check-label" htmlFor="upi">UPI</label>
                 </div>
+                <div className="form-check me-4">
+                  <input
+                    type="radio"
+                    className="form-check-input"
+                    id="netbanking"
+                    name="paymentMethod"
+                    value="netbanking"
+                    checked={paymentMethod === "netbanking"}
+                    onChange={(e) => setPaymentMethod(e.target.value)}
+                  />
+                  <label className="form-check-label" htmlFor="netbanking">Net Banking</label>
+                </div>
                 <div className="form-check">
                   <input
                     type="radio"
