@@ -6,15 +6,15 @@ const About = () => {
     <main className="about-page">
       <section className="about-hero">
         <div className="about-hero-copy">
-          <p className="eyebrow">About MAISON ARCA</p>
+          <p className="eyebrow">About RajStore</p>
           <h1>Building a smarter, more trusted way to shop online.</h1>
           <p className="about-hero-description">
-            MAISON ARCA combines thoughtful design with professional service.
+            RajStore combines thoughtful design with professional service.
             We help shoppers discover premium products, trusted brands, and seamless delivery—backed by attentive service and thoughtful curation.
           </p>
           <div className="about-hero-actions">
             <Link className="primary-btn" to="/products">Explore Products</Link>
-            <Link className="secondary-btn" to="/register">Join MAISON ARCA</Link>
+            <Link className="secondary-btn" to="/register">Join RajStore</Link>
           </div>
         </div>
 
@@ -53,7 +53,7 @@ const About = () => {
           <p className="eyebrow">Our story</p>
           <h2>Crafting a future-proof shopping experience</h2>
           <p>
-            MAISON ARCA started with a simple idea: make every shopper feel empowered by design without sacrificing a human touch.
+            RajStore started with a simple idea: make every shopper feel empowered by design without sacrificing a human touch.
             Today, our team blends professional service with modern design to deliver an e-commerce experience that feels fast, safe, and inspired.
           </p>
         </div>
@@ -76,7 +76,7 @@ const About = () => {
             <span>03</span>
             <div>
               <h4>Always evolving</h4>
-              <p>We invest in modern tools, feedback, and design to keep MAISON ARCA ahead of customer expectations.</p>
+              <p>We invest in modern tools, feedback, and design to keep RajStore ahead of customer expectations.</p>
             </div>
           </div>
         </div>

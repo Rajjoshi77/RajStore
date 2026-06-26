@@ -217,7 +217,7 @@ function Cart() {
           key: "rzp_test_SvzKcZX5yoa4fI", // Replace with your Razorpay Key ID
           amount: res.data.razorpayOrder.amount,
           currency: "INR",
-          name: "MAISON ARCA",
+          name: "RajStore",
           description: "Order Payment",
           order_id: res.data.razorpayOrder.id,
           handler: async (response) => {
