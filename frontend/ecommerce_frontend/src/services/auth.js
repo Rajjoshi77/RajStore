@@ -70,3 +70,12 @@ export const updateProfile = async ({ name, email, password, otp }) => {
   return res.data;
 };
 
+export const forgotPasswordAPI = async (email) => {
+  const res = await authApi.post("/auth/forgot-password", { email });
+  return res.data;
+};
+
+export const resetPasswordAPI = async (email, otp, newPassword) => {
+  const res = await authApi.post("/auth/reset-password", { email, otp, newPassword });
+  return res.data;
+};

@@ -58,11 +58,8 @@ function Navbar_1() {
             >
               <Nav.Link as={Link} to="/">Home</Nav.Link>
               <Nav.Link as={Link} to="/products">Products</Nav.Link>
-              <NavDropdown title="More" id="navbarScrollingDropdown">
-                <NavDropdown.Item as={Link} to="/products">Categories</NavDropdown.Item>
-                <NavDropdown.Divider />
-                <NavDropdown.Item as={Link} to="/contact">Contact Us</NavDropdown.Item>
-              </NavDropdown>
+              <Nav.Link as={Link} to="/products">Categories</Nav.Link>
+              <Nav.Link as={Link} to="/contact">Contact Us</Nav.Link>
               <Nav.Link as={Link} to="/about">About Us</Nav.Link>
               {user?.role === "admin" && (
                 <Nav.Link as={Link} to="/admin" className="text-danger fw-bold">Admin Panel</Nav.Link>

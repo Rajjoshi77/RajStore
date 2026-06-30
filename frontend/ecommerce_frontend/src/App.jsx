@@ -14,9 +14,6 @@ import Register from './pages/Register';
 import Orders from './pages/Orders';
 import AdminDashboard from './pages/AdminDashboard';
 import Profile from './pages/Profile';
-import ChatBotWidget from './components/ChatBot/ChatBotWidget';
-import './components/ChatBot/chatbot.css';
-
 
 function ProtectedRoute({ children }) {
 
@@ -40,7 +37,6 @@ function App() {
       <AuthProvider>
         <BrowserRouter>
         <Navbar />
-        <ChatBotWidget />
         <Routes>
 
           <Route path="/" element={<Home />} />

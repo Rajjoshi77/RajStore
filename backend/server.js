@@ -10,16 +10,12 @@ import newsletterRoutes from "./routes/newsletterRoutes.js";
 import contactRoutes from "./routes/contactRoutes.js";
 import chatRoutes from "./routes/chatRoutes.js";
 
-
 dotenv.config();
-
 connectDB();
-
 const app = express();
 
 app.use(cors());
 app.use(express.json());
-
 app.use("/api/products", productRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/orders", orderRoutes);

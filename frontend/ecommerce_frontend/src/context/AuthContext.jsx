@@ -6,8 +6,6 @@ import { getToken, logout, getUser } from "../services/auth";
 const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
-  // Initialize synchronously from localStorage so protected routes
-  // don't redirect before we read stored credentials.
   const initialUser = getUser();
   const initialAuthed = !!getToken() && !!initialUser;
 
